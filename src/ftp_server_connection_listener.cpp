@@ -16,9 +16,11 @@
   #include <sys/socket.h>
   #include <arpa/inet.h>
   #include <netdb.h>
-
   #include "ftp_server_net_util.hpp"
+
+
   using namespace std;
+
 
  void startListenerSocket(char* port, int& listenerSockDescriptor, bool& succeded)
  {
@@ -78,6 +80,8 @@
  }
 
 
+
+
  //Returns true if there is any remote connection request on the listener socket represented by 'sockDescriptor'.
  //Waits for a connection request until 'timeoutSec' + 'timeoutUsec' time.
  //If no connection request has been received before the time out, sets 'isTimedout' value to 'true'.
@@ -88,6 +92,9 @@
  {
  	return isSocketReadyToRead(sockDescriptor, timeoutSec, timeoutUSec, isError, isTimedout);
  }
+
+
+
 
 
  //Accepts a connection request on the listener socket represented by 'listenerSockDescriptor'.
@@ -104,6 +111,8 @@
  		clientSockDescriptor = connectionSocket;
  	}
  }
+
+
 
 
  //Closes the listener socket represented by 'listenerSockDescriptor'.

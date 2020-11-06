@@ -24,6 +24,8 @@
  	close(sockDescriptor);
  }
 
+
+
  //Determines and returns the associated port number from a given socket descriptor.
  int getPortFromSocketDescriptor(const int sockDescriptor)
  {
@@ -67,6 +69,8 @@
  		return true;
 
  }
+
+
 
 
  //Determines and returns an IP address of the local host.

@@ -14,8 +14,10 @@
  #include <sys/socket.h>
  #include <arpa/inet.h>
  #include <netdb.h>
- using namespace std;
  #include "ftp_server_net_util.hpp"
+
+
+ using namespace std;
 
 
 
@@ -24,6 +26,8 @@
  {
  	return send(sockDescriptor, message, messageLength, 0);
  }
+
+
 
 
  //Returns true if there is any data sent by the remote computer on the stream socket represented by 'sockDescriptor'.
@@ -47,11 +51,16 @@
  }
 
 
+
+
+
  //Closes the stream socket, represented by 'sockDescriptor'.
  void closeConnection(int& sockDescriptor)
  {
  	closeSocket(sockDescriptor);
  }
+
+
 
 
 

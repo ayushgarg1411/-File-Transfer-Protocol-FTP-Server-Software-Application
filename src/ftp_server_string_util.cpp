@@ -78,12 +78,16 @@
   }
 
 
+
+
   //Removes all the spaces, if there is any, from the beginning and the ending of 'str'.
   void stripLeadingAndTrailingSpaces(char* str)
   {
     string su = str;
     su.erase(remove(su.begin(), su.end(), ' '), su.end());
   }
+
+
 
 
   //Removes new line character ('\n'), if there is any, from the end of 'str'.
