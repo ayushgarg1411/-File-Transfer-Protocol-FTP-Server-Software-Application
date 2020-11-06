@@ -20,7 +20,61 @@
 #include "ftp_server_net_util.hpp"
 
 
+ void startListenerSocket(char* port, int& listenerSockDescriptor, bool& succeded)
+ {
+ 	size_t hn_length = 256;
+ 	char hostname[hn_length];
+ 	gethostname(hostname, hn_length);
 
+ 	struct addrinfo hints;
+ 	memset(&hints, 0, sizeof(struct addrinfo));
+ 	hints.ai_flags = AI_PASSIVE;
+ 	hints.ai_family = AF_UNSPEC;
+ 	hints.ai_socktype = SOCK_STREAM;
+
+ 	struct addrinfo* results;
+   	int x;
+   	x = getaddrinfo(hostname, port, &hints, &results);
+ 	if(x != 0)
+ 	{
+ 		cerr<<"Can't get address info."<<endl;
+ 		exit(1);
+ 	}
+ 	int listenerSocket = -1;
+ 	char* listenerSocketIP = NULL;
+ 	struct addrinfo* result = results;
+ 	while(result != NULL)
+ 	{
+ 		listenerSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+ 		if(listenerSocket != -1)
+ 		{
+ 			int optValue = 1;
+ 			if(setsockopt(listenerSocket, SOL_SOCKET, SO_REUSEADDR, &optValue, sizeof(int)) == 0)
+ 			{
+ 				if(bind(listenerSocket, result->ai_addr, result->ai_addrlen) == 0)
+ 				{
+ 					struct sockaddr_in* addrinfo_Address = (struct sockaddr_in*)result->ai_addr;
+ 					listenerSocketIP = inet_ntoa(addrinfo_Address->sin_addr);
+ 					break;
+ 				}
+ 			}
+ 			close(listenerSocket);
+ 			listenerSocket = -1;
+ 		}
+ 		result = result->ai_next;
+ 	}
+ 	freeaddrinfo(results);
+ 	if(listenerSocket == -1 || result == NULL)
+ 	{
+ 		cerr<<"Can't open and bind listener socket."<<endl;
+ 		exit(1);
+ 	}
+ 	const int backLog = 5;
+ 	listen(listenerSocket, backLog);
+ 	listenerSockDescriptor = listenerSocket;
+ 	succeded = true;
+
+ }
 
 
  //Returns true if there is any remote connection request on the listener socket represented by 'sockDescriptor'.
