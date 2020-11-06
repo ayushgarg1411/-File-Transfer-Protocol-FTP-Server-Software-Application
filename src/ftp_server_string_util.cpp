@@ -46,7 +46,19 @@
 
 
  //Changes all characters of 'str' to upper case.
+ /*void toUpper(char* str)
+ {
+ 	transform(str.begin(), str.end(), str.begin(), ::toupper);
+ }
 
+
+
+ //Changes all characters of 'str' to lower case.
+ void toLower(char* str)
+ {
+ 	transform(str.begin(), str.end(), str.begin(), ::tolower);
+ }
+ */
 
  //Removes all the spaces, if there is any, from the beginning and the ending of 'str'.
  void stripLeadingAndTrailingSpaces(char* str)
