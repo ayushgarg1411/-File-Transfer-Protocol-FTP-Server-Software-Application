@@ -7,6 +7,7 @@
  */
 
  #include <iostream>
+ #include <string>
  #include <stdlib.h>
  #include <unistd.h>
  #include <string.h>
@@ -15,6 +16,9 @@
  #include <sys/socket.h>
  #include <arpa/inet.h>
  #include <netdb.h>
+ #include <algorithm>
+ #include "../include/ftp_server_net_util.hpp"
+
  using namespace std;
 
 

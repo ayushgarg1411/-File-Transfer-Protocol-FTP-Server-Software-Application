@@ -7,16 +7,20 @@
  */
 
 
-  #include <iostream>
-  #include <stdlib.h>
-  #include <unistd.h>
-  #include <string.h>
-  #include <sys/types.h>
-  #include <sys/time.h>
-  #include <sys/socket.h>
-  #include <arpa/inet.h>
-  #include <netdb.h>
-  #include "ftp_server_net_util.hpp"
+ #include <iostream>
+ #include <string>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/time.h>
+ #include <sys/socket.h>
+ #include <arpa/inet.h>
+ #include <netdb.h>
+ #include <algorithm>
+ #include "../include/ftp_server_net_util.hpp"
+ #include "../include/ftp_server_connection_listener.hpp"
+
 
 
   using namespace std;
@@ -43,7 +47,7 @@
  		exit(1);
  	}
  	int listenerSocket = -1;
- 	char* listenerSocketIP = NULL;
+ 	//char* listenerSocketIP = NULL;
  	struct addrinfo* result = results;
  	while(result != NULL)
  	{
@@ -55,8 +59,8 @@
  			{
  				if(bind(listenerSocket, result->ai_addr, result->ai_addrlen) == 0)
  				{
- 					struct sockaddr_in* addrinfo_Address = (struct sockaddr_in*)result->ai_addr;
- 					listenerSocketIP = inet_ntoa(addrinfo_Address->sin_addr);
+ 					//struct sockaddr_in* addrinfo_Address = (struct sockaddr_in*)result->ai_addr;
+ 				//	listenerSocketIP = inet_ntoa(addrinfo_Address->sin_addr);
  					break;
  				}
  			}
