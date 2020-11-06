@@ -1,8 +1,8 @@
 /**
  * @file: ftp_server_net_util.cpp
- * @author: Name, Student Number, Section, CSCI 460, VIU
+ * @author: Ayush, 656665809, F20N02, CSCI 460, VIU
  * @version: 1.0.0
- * @modified: June 24, 2020
+ * @modified: NOV 05, 2020
  *
  */
 
@@ -91,9 +91,11 @@
  		cerr<<"Can't get address info."<<endl;
  		exit(1);
  	}
+
  	int listenerSocket = -1;
  	char* listenerSocketIP = NULL;
  	struct addrinfo* result = results;
+
  	while(result != NULL)
  	{
  		listenerSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
@@ -109,6 +111,7 @@
  					break;
  				}
  			}
+
  			close(listenerSocket);
  			listenerSocket = -1;
  		}

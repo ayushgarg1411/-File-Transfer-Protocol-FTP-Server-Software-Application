@@ -1,8 +1,8 @@
 /**
  * @file: ftp_server_connection_listener.cpp
- * @author: Name, Student Number, Section, CSCI 460, VIU
+ * @author: Ayush, 656665809, F20N02, CSCI 460, VIU
  * @version: 1.0.0
- * @modified: June 24, 2020
+ * @modified: NOV 05, 2020
  *
  */
 
@@ -16,9 +16,9 @@
   #include <sys/socket.h>
   #include <arpa/inet.h>
   #include <netdb.h>
-  using namespace std;
-#include "ftp_server_net_util.hpp"
 
+  #include "ftp_server_net_util.hpp"
+  using namespace std;
 
  void startListenerSocket(char* port, int& listenerSockDescriptor, bool& succeded)
  {
@@ -63,6 +63,7 @@
  		}
  		result = result->ai_next;
  	}
+
  	freeaddrinfo(results);
  	if(listenerSocket == -1 || result == NULL)
  	{
@@ -82,6 +83,7 @@
  //If no connection request has been received before the time out, sets 'isTimedout' value to 'true'.
  //If any error occurs, sets 'isError' value to 'true'.
  //Calls 'isSocketReadyToRead()' function from 'ftp_server_net_util.hpp' to do all of the above.
+
  bool isListenerSocketReady(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool&isTimedout)
  {
  	return isSocketReadyToRead(sockDescriptor, timeoutSec, timeoutUSec, isError, isTimedout);

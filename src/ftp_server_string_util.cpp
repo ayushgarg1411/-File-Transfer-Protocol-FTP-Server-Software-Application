@@ -1,13 +1,23 @@
 /**
  * @file: ftp_server_string_util.cpp
- * @author: Name, Student Number, Section, CSCI 460, VIU
+ * @author: Ayush, 656665809, F20N02, CSCI 460, VIU
  * @version: 1.0.0
- * @modified: June 24, 2020
+ * @modified: NOV 05, 2020
  *
  */
 
- #include <string>
- #include <string.h>
+
+
+   #include <iostream>
+   #include <string>
+   #include <stdlib.h>
+   #include <unistd.h>
+   #include <string.h>
+   #include <sys/types.h>
+   #include <sys/time.h>
+   #include <sys/socket.h>
+   #include <arpa/inet.h>
+   #include <netdb.h>
 #include "ftp_server_string_util.hpp"
  using namespace std;
 
