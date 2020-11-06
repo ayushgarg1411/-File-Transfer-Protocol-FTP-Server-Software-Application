@@ -25,10 +25,9 @@
  //Replaces all the occurrences of 'find' character in 'str' with 'replace' character.
  void replaceAll(char* str, char find, char replace)
  {
- 	int l = strlen(str);
- 	for(int i=0; i<l; i++)
- 		if(str[i] == find)
- 			str[i] = replace;
+   string s = str;
+   std::replace(s.begin(), s.end(), find, replace);
+
  }
 
 
@@ -38,8 +37,12 @@
  {
  	int l = strlen(prefix);
  	for(int i=0; i<l; i++)
+  {
  		if(str[i] != prefix[i])
+    {
  			return false;
+    }
+  }
  	return true;
  }
 
@@ -49,44 +52,8 @@
  {
  	const char *ptr = strstr(str, substr);
  	if(ptr != NULL)
+  {
  		return true;
+  }
  	return false;
- }
-
-
-
- //Changes all characters of 'str' to upper case.
- /*void toUpper(char* str)
- {
- 	transform(str.begin(), str.end(), str.begin(), ::toupper);
- }
-
-
-
- //Changes all characters of 'str' to lower case.
- void toLower(char* str)
- {
- 	transform(str.begin(), str.end(), str.begin(), ::tolower);
- }
- */
-
- //Removes all the spaces, if there is any, from the beginning and the ending of 'str'.
- void stripLeadingAndTrailingSpaces(char* str)
- {
- 	int count = 0;
-     for (int i = 0; str[i]; i++)
- 		if (str[i] != ' ')
- 			str[count++] = str[i];
-     str[count] = '\0';
- }
-
-
- //Removes new line character ('\n'), if there is any, from the end of 'str'.
- void stripNewlineAtEnd(char* str)
- {
- 	int count = 0;
-     for (int i = 0; str[i]; i++)
- 		if (str[i] != '\n')
- 			str[count++] = str[i];
-     str[count] = '\0';
  }
