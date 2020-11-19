@@ -19,37 +19,49 @@
  *      NLIST
  *      RETR <filename>
  *      QUIT
- * 
- * Main process keeps track of the child processes and stops them when it is being stopped. 
+ *
+ * Main process keeps track of the child processes and stops them when it is being stopped.
  */
 
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <list>
-#include <cstring>
-#include <cstdlib>
-#include <sys/types.h>
-#include <unistd.h>
-#include <signal.h>
-#include "ftp_server_connection_listener.hpp"
-#include "ftp_server_session.hpp"
-#include "ftp_server_net_util.hpp"
-
+ #include <iostream>
+ #include <string>
+ #include <list>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/time.h>
+ #include <sys/socket.h>
+ #include <arpa/inet.h>
+ #include <netdb.h>
+ #include <algorithm>
+ #include "ftp_server_net_util.hpp"
+ #include "ftp_server_connection_listener.hpp"
+ #include "ftp_server_session.hpp"
+ #include "ftp_server_nlist.hpp"
+ #include "ftp_server_request.hpp"
+ #include "ftp_server_retrieve.hpp"
+ #include "ftp_server_response.hpp"
+ #include "ftp_server_passive.hpp"
+ #include "ftp_server_connection.hpp"
+ #include <signal.h>
+ #include <iomanip>
+ #include <cstring>
+ #include <cstdlib>
 
 using namespace std;
 
 
-list<pid_t> clients(MAX_CLIENT_CONNECTIONS);  	// Holds the ids of the child process 
+list<pid_t> clients(MAX_CLIENT_CONNECTIONS);  	// Holds the ids of the child process
 						// that deals with individual ftp
-						// client session. 
+						// client session.
 
 
 /*
  * Forward declarations of the helper functions
  */
 void usage(const char* prog);			// Prints usage text of FTP server application
-char* baseName(const char* pathname);		// Returns the name of the code base of FTP server application 
+char* baseName(const char* pathname);		// Returns the name of the code base of FTP server application
 void handleSIGTERM(int signal);			// Terminate signal handler
 void handleSIGINT(int signal);			// Interrupt signal handler
 void stopAllProcesses();			// Function to stop FTP server's main and child processes
@@ -62,27 +74,27 @@ void stopAllProcesses();			// Function to stop FTP server's main and child proce
  *
  * @param: argc -counts the number of command line arguments plus 1 (for code base).
  * @param: argv -holds the code base name and the command line arguments.
- * 
+ *
  * @return: 0, if successful. -1, otherwise.
  */
 int main (int argc, char** argv) {
-   
+
     //Check whether the port number has passed as the command line argument.
     if(argc<2) {
-	//Port number is missing, show usage text to the user and return.    
+	//Port number is missing, show usage text to the user and return.
         usage(baseName(argv[0]));
 	return -1;
     }
 
     //Grab the port number from the command line argument.
-    char* port = strdup(argv[1]);  
-    
+    char* port = strdup(argv[1]);
+
     //Declare a descriptor for the listener socket.
     int listenerSockDescriptor = -1;
-    
+
     //Declare a flag to hold the status of the listener socket
     bool succeded = false;
-    
+
     /*
      * Register signal handlers against Terminate and Interrupted signals to
      * stop the main and all child procesess of FTP server application
@@ -93,38 +105,38 @@ int main (int argc, char** argv) {
     //Grab IP of the machine, where FTP server application is running
     char* myIPAddress = getHostIPAddress();
     cout<<"FTP Server at IP address: "<<myIPAddress<< " is starting........."<<endl;
-    
+
     //Start the listener socket to accept client connection
     startListenerSocket(port, listenerSockDescriptor, succeded);
-    
+
     if(succeded && listenerSockDescriptor != -1) {
-	
+
     	clients.clear();
 
         while(1) {
             int clientSockDescriptor = -1;
 	    bool isError = false;
 	    bool isTimeout = false;
-	    
+
 	    /*
 	     * Check whether the maximum number of client connections has not been reached yet and
 	     * the listener socket has some client connection request(s) pending
 	     */
-	    if(clients.size() < MAX_CLIENT_CONNECTIONS && 
+	    if(clients.size() < MAX_CLIENT_CONNECTIONS &&
 			    isListenerSocketReady(listenerSockDescriptor, 5, 0, isError, isTimeout) &&
 			    isError == false && isTimeout == false) {
-		   
+
 		   //Accept the pending connection request
          	   acceptClientConnection(listenerSockDescriptor, clientSockDescriptor);
-           	   
+
 		   /*
-		    * Start a child process with the accepted connection request 
+		    * Start a child process with the accepted connection request
 		    * to deal with the client FTP session independently.
 		    */
 		   if(clientSockDescriptor != -1) {
 			pid_t pid = -1;
 			//starts a child process to handle individual client's ftp session
-			if((pid=fork())==0) { 
+			if((pid=fork())==0) {
 				//listener socket is not required in the child process, close it
 				closeSocket(listenerSockDescriptor);
 				//starts a client session using client's connection
@@ -136,7 +148,7 @@ int main (int argc, char** argv) {
 				//exits the child process that was dealing with a client session
 				exit(0);
 			} //child process code ends here.
-		
+
 			if(pid != -1) {
 				//add the child process in the list of client processes
 				clients.push_back(pid);
@@ -170,7 +182,7 @@ void usage(const char* base) {
  * Gets the name of the code base of FTP server application from its pathname.
  * @param: pathname - passes the pathname of the code base of FTP server application.
  * @return: the name of the code base of FTP server application.
- */ 
+ */
 char* baseName(const char* pathname) {
     char* path_name = const_cast<char*>(pathname);
     char* base_name = path_name;
@@ -202,7 +214,7 @@ void handleSIGINT(int signal) {
  * Helper function to stop the main and all child processes.
  */
 void stopAllProcesses() {
-	
+
 	/*
 	 * First deal with the child procesess.
 	 * Sends signals to the child processes to stop.

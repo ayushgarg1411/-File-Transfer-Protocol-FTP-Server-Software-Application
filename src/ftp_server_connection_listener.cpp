@@ -18,8 +18,12 @@
  #include <arpa/inet.h>
  #include <netdb.h>
  #include <algorithm>
- #include "../include/ftp_server_net_util.hpp"
- #include "../include/ftp_server_connection_listener.hpp"
+ #include "ftp_server_net_util.hpp"
+ #include "ftp_server_connection_listener.hpp"
+ #include "ftp_server_session.hpp"
+ #include "ftp_server_nlist.hpp"
+ #include "ftp_server_request.hpp"
+ #include "ftp_server_retrieve.hpp"
 
 
 
