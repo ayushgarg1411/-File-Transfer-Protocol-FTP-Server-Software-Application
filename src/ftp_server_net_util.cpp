@@ -8,6 +8,7 @@
 
  #include <iostream>
  #include <string>
+ #include <list>
  #include <stdlib.h>
  #include <unistd.h>
  #include <string.h>
@@ -18,11 +19,10 @@
  #include <netdb.h>
  #include <algorithm>
  #include "ftp_server_net_util.hpp"
- #include "ftp_server_connection_listener.hpp"
- #include "ftp_server_session.hpp"
- #include "ftp_server_nlist.hpp"
- #include "ftp_server_request.hpp"
- #include "ftp_server_retrieve.hpp"
+ #include <signal.h>
+ #include <iomanip>
+ #include <cstring>
+ #include <cstdlib>
 
  using namespace std;
 
@@ -30,14 +30,14 @@
  //Closes the stream socket, represented by 'sockDescriptor'.
  void closeSocket(int& sockDescriptor)
  {
- 	close(sockDescriptor);
+ 	//close(sockDescriptor);
  }
 
 
 
  //Determines and returns the associated port number from a given socket descriptor.
  int getPortFromSocketDescriptor(const int sockDescriptor)
- {
+ {/*
    struct sockaddr_in sin;
    socklen_t len = sizeof(sin);
 
@@ -45,7 +45,7 @@
        perror("getsockname");
 
    return ntohs(sin.sin_port);
-
+*/
  }
 
 
@@ -55,7 +55,7 @@
  //If no data has been sent before the time out, sets 'isTimedout' value to 'true'.
  //If any error occurs, sets 'isError' value to 'true'.
  bool isSocketReadyToRead(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool& isTimedout)
- {
+ {/*
    fd_set listenerReadySet;
    FD_ZERO(&listenerReadySet);
    FD_SET(sockDescriptor, &listenerReadySet);
@@ -76,7 +76,7 @@
  	}
  	else
  		return true;
-
+*/
  }
 
 
@@ -84,7 +84,7 @@
 
  //Determines and returns an IP address of the local host.
  char* getHostIPAddress()
- {
+ {/*
  	size_t hn_length = 256;
  	char hostname[hn_length];
  	gethostname(hostname, hn_length);
@@ -131,4 +131,5 @@
  		result = result->ai_next;
  	}
  	return listenerSocketIP;
+  */
  }

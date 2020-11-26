@@ -10,6 +10,7 @@
 
  #include <iostream>
  #include <string>
+ #include <list>
  #include <stdlib.h>
  #include <unistd.h>
  #include <string.h>
@@ -19,30 +20,28 @@
  #include <arpa/inet.h>
  #include <netdb.h>
  #include <algorithm>
- #include "ftp_server_net_util.hpp"
- #include "ftp_server_connection_listener.hpp"
- #include "ftp_server_session.hpp"
- #include "ftp_server_nlist.hpp"
- #include "ftp_server_request.hpp"
- #include "ftp_server_retrieve.hpp"
- 
+ #include "ftp_server_string_util.hpp"
+ #include <signal.h>
+ #include <iomanip>
+ #include <cstring>
+ #include <cstdlib>
  using namespace std;
 
 
 
   //Replaces all the occurrences of 'find' character in 'str' with 'replace' character.
   void replaceAll(char* str, char find, char replace)
-  {
+  {/*
     string s = str;
     std::replace(s.begin(), s.end(), find, replace);
-
+*/
   }
 
 
 
   //Returns true if 'str' starts with 'prefix'.
   bool startsWith(const char* str, const char* prefix)
-  {
+  {/*
   	int l = strlen(prefix);
   	for(int i=0; i<l; i++)
    {
@@ -52,54 +51,55 @@
      }
    }
   	return true;
+    */
   }
 
 
   //Returns true if 'str' contains 'substr'
   bool contains(const char* str, const char* substr)
-  {
+  {/*
   	const char *ptr = strstr(str, substr);
   	if(ptr != NULL)
    {
   		return true;
    }
-  	return false;
+  	return false;*/
   }
 
 
 
   //Changes all characters of 'str' to upper case.
   void toUpper(char* str)
-  {
+  {/*
     string su = str;
     transform(su.begin(), su.end(), su.begin(), ::toupper);
-  }
+  */}
 
 
 
   //Changes all characters of 'str' to lower case.
   void toLower(char* str)
-  {
+  {/*
     string su = str;
     transform(su.begin(), su.end(), su.begin(), ::tolower);
-  }
+  */}
 
 
 
 
   //Removes all the spaces, if there is any, from the beginning and the ending of 'str'.
   void stripLeadingAndTrailingSpaces(char* str)
-  {
+  {/*
     string su = str;
     su.erase(remove(su.begin(), su.end(), ' '), su.end());
-  }
+  */}
 
 
 
 
   //Removes new line character ('\n'), if there is any, from the end of 'str'.
   void stripNewlineAtEnd(char* str)
-  {
+  {/*
     string su = str;
     su.erase(remove(su.begin(), su.end(), '\n'), su.end());
-  }
+  */}

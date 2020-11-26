@@ -7,6 +7,7 @@
  */
  #include <iostream>
  #include <string>
+ #include <list>
  #include <stdlib.h>
  #include <unistd.h>
  #include <string.h>
@@ -16,15 +17,32 @@
  #include <arpa/inet.h>
  #include <netdb.h>
  #include <algorithm>
- #include "ftp_server_net_util.hpp"
- #include "ftp_server_connection_listener.hpp"
- #include "ftp_server_session.hpp"
  #include "ftp_server_nlist.hpp"
  #include "ftp_server_request.hpp"
  #include "ftp_server_retrieve.hpp"
+ #include "ftp_server_response.hpp"
+ #include "ftp_server_passive.hpp"
+ #include "ftp_server_connection.hpp"
+ #include <signal.h>
+ #include <iomanip>
+ #include <cstring>
+ #include <cstdlib>
+
+
+using namespace std;
+
+void interpreteCommand(char* command, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isUser, bool& isLoggedIn, const char* rootDir)
+{
+
+}
+
+void parseCommandLine(char* commandLine, char* command, char* argument)
+{
+
+}
 
  void handleCommandUSER(char* username, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isUser)
- {
+ {/*
    const int size = 1024;
    char cmd[size];
    memset(cmd, 0, sizeof(char)*size);
@@ -37,11 +55,11 @@
    {
      closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
    }
-   sendToRemote(controlSockDescriptor, cmd, size);
+   sendToRemote(controlSockDescriptor, cmd, size);*/
  }
 
  void handleCommandPASS(char* password, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isUser, bool& isLoggedIn)
- {
+ {/*
    const int size = 1024;
    char cmd[size];
    memset(cmd, 0, sizeof(char)*size);
@@ -59,11 +77,11 @@
   {
     sendToRemote(controlSockDescriptor, cmd, size);
     handleNotLoggedIn(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
-  }
+  }*/
  }
 
  void handleCommandPWD(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
- {
+ {/*
  	if(!isLoggedIn)
  	{
  		handleNotLoggedIn(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
@@ -74,11 +92,11 @@
  		char cmd[size];
  		memset(cmd, 0, sizeof(char)*size);
  		sendToRemote(controlSockDescriptor, cmd, size);
- 	}
+ 	}*/
  }
 
  void handleCommandCWD(char* directory, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
- {
+ {/*
  	if(!isLoggedIn)
  	{
  		handleNotLoggedIn(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
@@ -89,12 +107,12 @@
  		char cmd[size];
  		memset(cmd, 0, sizeof(char)*size);
  		sendToRemote(controlSockDescriptor, cmd, size);
- 	}
+ 	}*/
  }
 
 
  void handleCommandCDUP(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn, const char* rootDir)
- {
+ {/*
  	if(!isLoggedIn)
  	{
  		handleNotLoggedIn(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
@@ -105,32 +123,47 @@
  		char cmd[size];
  		memset(cmd, 0, sizeof(char)*size);
  		sendToRemote(controlSockDescriptor, cmd, size);
- 	}
+ 	}*/
  }
+ void handleCommandPASV(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
+ {
+
+ }
+
+ void handleCommandNLST(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
+ {
+
+ }
+
+ void handleCommandRETR(char* argument, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
+ {
+
+ }
+
 
 
  void handleCommandQUIT(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor,bool& isClientConnected)
- {
+ {/*
  	const int size = 1024;
  	char cmd[size];
  	memset(cmd, 0, sizeof(char)*size);
  	closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
- 	sendToRemote(controlSockDescriptor, cmd, size);
+ 	sendToRemote(controlSockDescriptor, cmd, size);*/
  }
 
  void handleCommandUnSupported(const int controlSockDescriptor)
- {
+ {/*
  	const int size = 1024;
  	char cmd[size];
  	memset(cmd, 0, sizeof(char)*size);
- 	sendToRemote(controlSockDescriptor, cmd, size);
+ 	sendToRemote(controlSockDescriptor, cmd, size);*/
  }
 
  void handleNotLoggedIn(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected)
- {
+ {/*
  	const int size = 1024;
  	char cmd[size];
  	memset(cmd, 0, sizeof(char)*size);
  	closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
- 	sendToRemote(controlSockDescriptor, cmd, size);
+ 	sendToRemote(controlSockDescriptor, cmd, size);*/
  }
