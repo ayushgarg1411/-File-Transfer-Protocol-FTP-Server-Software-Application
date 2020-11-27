@@ -6,23 +6,15 @@
  *
  */
  #include <iostream>
+ #include <iomanip>
  #include <string>
  #include <list>
- #include <stdlib.h>
- #include <unistd.h>
- #include <string.h>
- #include <sys/types.h>
- #include <sys/time.h>
- #include <sys/socket.h>
- #include <arpa/inet.h>
- #include <netdb.h>
- #include <algorithm>
- #include "ftp_server_nlist.hpp"
- #include <signal.h>
- #include <iomanip>
  #include <cstring>
  #include <cstdlib>
-
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <signal.h>
+ #include "ftp_server_nlist.hpp"
  using namespace std;
 
  int listDirEntries(int dataSockDescriptor)

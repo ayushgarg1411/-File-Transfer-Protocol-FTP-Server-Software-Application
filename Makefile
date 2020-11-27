@@ -1,4 +1,4 @@
-#Makefile for CSCI 460 project2 
+#Makefile for CSCI 460 project2
 
 CC = g++
 WFLAG = -Wall  		#Warning Flag
@@ -112,7 +112,3 @@ install: ${BINARY}/ftpserver
 
 uninstall:
 	@echo Sorry, uninstallation has not been done.
-
-
-
-

@@ -6,23 +6,20 @@
  *
  */
  #include <iostream>
+ #include <iomanip>
  #include <string>
  #include <list>
- #include <stdlib.h>
- #include <unistd.h>
- #include <string.h>
- #include <sys/types.h>
- #include <sys/time.h>
+ #include <cstring>
+ #include <cstdlib>
  #include <sys/socket.h>
  #include <arpa/inet.h>
  #include <netdb.h>
- #include <algorithm>
+ #include <netinet/in.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <signal.h>
  #include "ftp_server_net_util.hpp"
  #include "ftp_server_connection_listener.hpp"
- #include <signal.h>
- #include <iomanip>
- #include <cstring>
- #include <cstdlib>
 
 
   using namespace std;
@@ -30,7 +27,7 @@
 
  void startListenerSocket(char* port, int& listenerSockDescriptor, bool& succeded)
  {
-   /*
+
  	size_t hn_length = 256;
  	char hostname[hn_length];
  	gethostname(hostname, hn_length);
@@ -83,7 +80,7 @@
  	listen(listenerSocket, backLog);
  	listenerSockDescriptor = listenerSocket;
  	succeded = true;
-*/
+
  }
 
 
@@ -97,7 +94,7 @@
 
  bool isListenerSocketReady(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool&isTimedout)
  {
- 	//return isSocketReadyToRead(sockDescriptor, timeoutSec, timeoutUSec, isError, isTimedout);
+ 	return isSocketReadyToRead(sockDescriptor, timeoutSec, timeoutUSec, isError, isTimedout);
  }
 
 
@@ -107,7 +104,7 @@
  //Accepts a connection request on the listener socket represented by 'listenerSockDescriptor'.
  //Opens the connection to the remote computer and represents the connection by 'clientSockDescriptor'.
  void acceptClientConnection(const int listenerSockDescriptor, int& clientSockDescriptor)
- {/*
+ {
  	struct sockaddr_in connectionAddress;
  	socklen_t socklen = (socklen_t) sizeof(struct sockaddr_in);
  	memset(&connectionAddress, 0, sizeof(struct sockaddr_in));
@@ -117,7 +114,7 @@
  	{
  		clientSockDescriptor = connectionSocket;
  	}
-  */
+
  }
 
 
@@ -126,5 +123,5 @@
  //Closes the listener socket represented by 'listenerSockDescriptor'.
  void closeListenerSocket(int& listenerSockDescriptor)
  {
- 	//close(listenerSockDescriptor);
+ 	close(listenerSockDescriptor);
  }
