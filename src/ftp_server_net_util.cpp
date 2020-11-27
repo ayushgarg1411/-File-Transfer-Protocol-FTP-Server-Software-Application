@@ -7,37 +7,33 @@
  */
 
  #include <iostream>
+ #include <iomanip>
  #include <string>
  #include <list>
- #include <stdlib.h>
- #include <unistd.h>
- #include <string.h>
- #include <sys/types.h>
- #include <sys/time.h>
+ #include <cstring>
+ #include <cstdlib>
  #include <sys/socket.h>
  #include <arpa/inet.h>
  #include <netdb.h>
- #include <algorithm>
- #include "ftp_server_net_util.hpp"
+ #include <netinet/in.h>
+ #include <sys/types.h>
+ #include <unistd.h>
  #include <signal.h>
- #include <iomanip>
- #include <cstring>
- #include <cstdlib>
-
+ #include "ftp_server_net_util.hpp"
  using namespace std;
 
 
  //Closes the stream socket, represented by 'sockDescriptor'.
  void closeSocket(int& sockDescriptor)
  {
- 	//close(sockDescriptor);
+ 	close(sockDescriptor);
  }
 
 
 
  //Determines and returns the associated port number from a given socket descriptor.
  int getPortFromSocketDescriptor(const int sockDescriptor)
- {/*
+ {
    struct sockaddr_in sin;
    socklen_t len = sizeof(sin);
 
@@ -45,7 +41,7 @@
        perror("getsockname");
 
    return ntohs(sin.sin_port);
-*/
+
  }
 
 
@@ -55,15 +51,15 @@
  //If no data has been sent before the time out, sets 'isTimedout' value to 'true'.
  //If any error occurs, sets 'isError' value to 'true'.
  bool isSocketReadyToRead(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool& isTimedout)
- {/*
-   fd_set listenerReadySet;
-   FD_ZERO(&listenerReadySet);
-   FD_SET(sockDescriptor, &listenerReadySet);
+ {
+  fd_set listenerReadySet;
+  FD_ZERO(&listenerReadySet);
+  FD_SET(sockDescriptor, &listenerReadySet);
  	struct timeval socketTimeOutValue;
  	socketTimeOutValue.tv_sec = timeoutSec;
  	socketTimeOutValue.tv_usec = timeoutUSec;
 
- 	int ready = select(sockDescriptor, &listenerReadySet, NULL, NULL, &socketTimeOutValue);
+ 	int ready = select(sockDescriptor+1, &listenerReadySet, NULL, NULL, &socketTimeOutValue);
  	if(ready == -1)
  	{
  		isError = true;
@@ -72,64 +68,25 @@
  	else if(ready == 0)
  	{
  		isTimedout = true;
-     return false;
  	}
- 	else
+
  		return true;
-*/
+
  }
 
 
 
 
- //Determines and returns an IP address of the local host.
  char* getHostIPAddress()
- {/*
+ {
  	size_t hn_length = 256;
  	char hostname[hn_length];
  	gethostname(hostname, hn_length);
+	char *hostIP;
+	struct hostent *host;
+	gethostname(hostname, hn_length);
+	host = gethostbyname(hostname);
+	hostIP = inet_ntoa(*((struct in_addr*) host->h_addr_list[0]));
+	return hostIP;
 
- 	struct addrinfo hints;
- 	memset(&hints, 0, sizeof(struct addrinfo));
- 	hints.ai_flags = AI_PASSIVE;
- 	hints.ai_family = AF_UNSPEC;
- 	hints.ai_socktype = SOCK_STREAM;
-
- 	struct addrinfo* results;
-   char* port = strdup("2020");
-   int x;
-   x = getaddrinfo(hostname, port, &hints, &results);
- 	if(x != 0)
- 	{
- 		cerr<<"Can't get address info."<<endl;
- 		exit(1);
- 	}
-
- 	int listenerSocket = -1;
- 	char* listenerSocketIP = NULL;
- 	struct addrinfo* result = results;
-
- 	while(result != NULL)
- 	{
- 		listenerSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
- 		if(listenerSocket != -1)
- 		{
- 			int optValue = 1;
- 			if(setsockopt(listenerSocket, SOL_SOCKET, SO_REUSEADDR, &optValue, sizeof(int)) == 0)
- 			{
- 				if(bind(listenerSocket, result->ai_addr, result->ai_addrlen) == 0)
- 				{
- 					struct sockaddr_in* addrinfo_Address = (struct sockaddr_in*)result->ai_addr;
- 					listenerSocketIP = inet_ntoa(addrinfo_Address->sin_addr);
- 					break;
- 				}
- 			}
-
- 			close(listenerSocket);
- 			listenerSocket = -1;
- 		}
- 		result = result->ai_next;
- 	}
- 	return listenerSocketIP;
-  */
  }
