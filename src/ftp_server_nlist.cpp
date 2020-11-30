@@ -19,5 +19,8 @@
 
  int listDirEntries(int dataSockDescriptor)
  {
-  // return 0;
+   return 0;
  }
+ //Determines and sends the list of current directory entries to the client using
+ //the data connection, represented by 'dataSockDescriptor'.
+ //Returns the count of entries to the caller.

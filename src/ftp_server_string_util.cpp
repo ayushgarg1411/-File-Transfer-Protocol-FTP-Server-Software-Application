@@ -28,6 +28,7 @@
   {
     std::string s = str;
     std::replace(s.begin(), s.end(), find, replace);
+    strcpy(str, s.c_str());
 
   }
 using namespace std;
