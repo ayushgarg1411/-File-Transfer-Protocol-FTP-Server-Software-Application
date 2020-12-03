@@ -99,7 +99,7 @@ using namespace std;
     for(i = 0; str[i] == ' '; i++);
     if(i)
      {
-       for(j = 0; str[j] = str[i+j]; j++);
+       for(j = 0; (str[j] = str[i+j]); j++);
      }
    for(i = strlen(str)-1; str[i] == ' '; i--);
    str[i+1] = '\0';

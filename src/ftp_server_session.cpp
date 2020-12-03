@@ -25,26 +25,25 @@ void startClientFTPSession(int& controlSockDescriptor)
   bool isLoggedIn = false;
   bool isError = false;
   bool isTimedOut = false;
-  int dataSocketDescriptor = -1;
+  int dataSockDescriptor = -1;
   int dataListenerSockDescriptor = -1;
-  char* rootDir = new char[PATH_MAX];
-  char* message = new char[FTP_RESPONSE_MAX_LENGTH];
+  char* rootDir = new char[PATH_MAX], *message = new char[FTP_RESPONSE_MAX_LENGTH];
   getcwd(rootDir, sizeof(rootDir));
   sendToRemote(controlSockDescriptor, CONNECTED_RESPONSE, strlen(CONNECTED_RESPONSE));
   while(isConnectionReadyToRead(controlSockDescriptor, FTP_CLIENT_SESSION_TIMEOUT_SEC, FTP_CLIENT_SESSION_TIMEOUT_USEC, isError, isTimedOut))
   {
     receiveFromRemote(controlSockDescriptor, message, strlen(message));
-    interpreteCommand(message, controlSockDescriptor, dataListenerSockDescriptor, dataSocketDescriptor, isClientConnected, isUser, isLoggedIn, rootDir);
+    interpreteCommand(message, controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected, isUser, isLoggedIn, rootDir);
   }
-  closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSocketDescriptor, isClientConnected);
+  closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
   if(isTimedOut)
   {
   	sendToRemote(controlSockDescriptor, PASSIVE_ERROR_TIMEOUT_RESPONSE, strlen(PASSIVE_ERROR_TIMEOUT_RESPONSE));
-    closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSocketDescriptor, isClientConnected);
+    closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
   }
   else if(isTimedOut)
   {
   	sendToRemote(controlSockDescriptor, PASSIVE_ERROR_RESPONSE, strlen(PASSIVE_ERROR_RESPONSE));
-    closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSocketDescriptor, isClientConnected);
+    closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
   }
 }

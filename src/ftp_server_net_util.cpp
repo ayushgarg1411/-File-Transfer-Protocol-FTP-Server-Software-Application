@@ -68,6 +68,7 @@
  	else if(ready == 0)
  	{
  		isTimedout = true;
+    return false;
  	}
 
  		return true;

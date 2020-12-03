@@ -225,6 +225,8 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 
 
 
+
+
  void handleCommandRETR(char* argument, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
  {
    if(!isLoggedIn)
@@ -253,6 +255,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 	}
 
  }
+
 
 
 
