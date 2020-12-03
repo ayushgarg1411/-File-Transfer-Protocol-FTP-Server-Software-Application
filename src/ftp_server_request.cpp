@@ -95,7 +95,6 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
   }
   else
   {
-    //sendToRemote(controlSockDescriptor, message.c_str(), message.length());
     sendToRemote(controlSockDescriptor, INVALID_USERNAME_RESPONSE, strlen(INVALID_USERNAME_RESPONSE));
     closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
   }
@@ -160,11 +159,6 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 		sendToRemote(controlSockDescriptor, CHANGE_DIRECTORY_RESPONSE, strlen(CHANGE_DIRECTORY_RESPONSE));
 	}
  }
- //If the client is logged in, determines whether the requested 'directory' is valid or not.
- //A requested directory is not valid if any of the following is true
- //	It is not a subdirectory of the current working directory
- //	It starts with "./" or "../"
- //	It contains "/.", "/..", or "*"
 
  void handleCommandCDUP(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn, const char* rootDir)
  {
@@ -216,7 +210,11 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 	}
 	else
 	{
-		listDirEntries(dataSockDescriptor);
+    int count;
+		count = listDirEntries(dataSockDescriptor);
+    char* response = new char[FTP_RESPONSE_MAX_LENGTH];
+    sprintf(response, NLST_CONNECTION_CLOSE_RESPONSE, count);
+    sendToRemote(controlSockDescriptor, response, strlen(response));
 	}
  }
 
@@ -227,20 +225,34 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 
 
 
-
-
  void handleCommandRETR(char* argument, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
  {
+   if(!isLoggedIn)
+	{
+		sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
+		handleNotLoggedIn(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
+	}
+	if(!dataSockDescriptor)
+	{
+		sendToRemote(controlSockDescriptor, DATA_OPEN_CONNECTION_ERROR_RESPONSE, strlen(DATA_OPEN_CONNECTION_ERROR_RESPONSE));
+	}
+	else
+	{
+		int count;
+		count = sendFile(argument, dataSockDescriptor);
+    if(count > 0)
+		{
+			char* response = new char[FTP_RESPONSE_MAX_LENGTH];
+      sprintf(response, RETR_CONNECTION_CLOSE_RESPONSE, count);
+			sendToRemote(controlSockDescriptor, response, strlen(response));
+		}
+		else
+		{
+			sendToRemote(controlSockDescriptor, RETR_UNAVAILABLE_ERROR_RESPONSE, strlen(RETR_UNAVAILABLE_ERROR_RESPONSE));
+		}
+	}
 
  }
-
-
-
-
-
-
-
-
 
 
 
