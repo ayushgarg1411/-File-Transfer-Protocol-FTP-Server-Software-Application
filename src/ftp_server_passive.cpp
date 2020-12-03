@@ -9,6 +9,7 @@
   #include <iomanip>
   #include <string>
   #include <list>
+  #include <string.h>
   #include <cstring>
   #include <cstdlib>
   #include <sys/types.h>
@@ -25,38 +26,36 @@
 
  void enteringIntoPassive(const int controlSockDescriptor, int& passiveListenerSockDescriptor, int& dataSockDescriptor)
  {
-   bool succeeded, isError, isTimedout;
-	char* response;
+   bool succeeded = false;
+   bool isError = false;
+   bool isTimedout = false;
+	 char* response = new char[FTP_RESPONSE_MAX_LENGTH];
+
 	startPassiveListener(passiveListenerSockDescriptor, succeeded);
 	if(succeeded)
 	{
-		createPassiveSuccessResponse(response, passiveListenerSockDescriptor);
+    createPassiveSuccessResponse(response, passiveListenerSockDescriptor);
 		sendToRemote(controlSockDescriptor, response, strlen(response));
+    if(isListenerSocketReady(passiveListenerSockDescriptor, DATA_CONNECTION_TIME_OUT_SEC, DATA_CONNECTION_TIME_OUT_USEC, isError, isTimedout))
+    {
+      acceptClientConnection(passiveListenerSockDescriptor, dataSockDescriptor);
+      sendToRemote(controlSockDescriptor, DATA_CONNECTION_SUCCESS_RESPONSE, strlen(DATA_CONNECTION_SUCCESS_RESPONSE));
+      closeListenerSocket(passiveListenerSockDescriptor);
+    }
 	}
-	isListenerSocketReady(passiveListenerSockDescriptor, DATA_CONNECTION_TIME_OUT_SEC, DATA_CONNECTION_TIME_OUT_USEC, isError, isTimedout);
-
-		acceptClientConnection(controlSockDescriptor, passiveListenerSockDescriptor);
-		sendToRemote(controlSockDescriptor, DATA_CONNECTION_SUCCESS_RESPONSE, strlen(DATA_CONNECTION_SUCCESS_RESPONSE));
-		closeListenerSocket(passiveListenerSockDescriptor);
 
  }
- //Starts a passive connection listener by calling 'startPassiveListener()' function.
- //Once successful on the above function call, sends an appropriate response to the client.
- //Waits for a specific time interval to receive a client's connection request on the listener by calling
- //isListenerSocketReady() from 'ftp_server_connection_listener.hpp'.
- //Accepts client's connection request, if there is any, and opens a data connection with the client by calling
- //'acceptClientConnetion() function from 'ftp_server_connection_listener.hpp'.
- //Closes the connection listener after opening the data connection by calling 'closeListenerSocket()'
- //function from 'ftp_server_connection_listener.hpp'.
- //Sends appropriate response to the client using control connection.
- //Calls 'sendToRemote()' function from 'ftp_server_connection.hpp' to send response to client.
+
+
+
 
  void startPassiveListener(int& listenerSockDescriptor, bool& succeded)
  {
-	startListenerSocket(PASSIVE_DEFAULT_PORT, listenerSockDescriptor, succeded);
- }
- //Starts a passive listener socket that can listen connection requests from the remote computer.
- //by calling 'startListenerSocket()' function from 'ftp_server_connection_listener.hpp'.
+  char* response = new char[FTP_RESPONSE_MAX_LENGTH];
+  string s = PASSIVE_DEFAULT_PORT;
+  strcpy(response, s.c_str());
+	startListenerSocket(response, listenerSockDescriptor, succeded);
+}
 
 
  void createPassiveSuccessResponse(char* response, const int passiveListenerSockDescriptor)
@@ -64,13 +63,10 @@
   int port;
   char* ip;
 	port = getPortFromSocketDescriptor(passiveListenerSockDescriptor);
+  int x = port%256;
+  int y = port/256;
 	ip = getHostIPAddress();
-   sprintf(response, PASSIVE_SUCCESS_RESPONSE, ip, port, passiveListenerSockDescriptor); //bhosdiwale tisra %d apne gaand me daal le
+  replaceAll(ip, '.', ',');
+  sprintf(response, PASSIVE_SUCCESS_RESPONSE, ip,y, x);
 
-	//response = (PASSIVE_SUCCESS_RESPONSE, ip, port, 0);
  }
- //Creates a Passive success response.
- //Determines the passive listener port number from 'passiveListenerSockDescriptor' by calling
- //'getPortFromSocketDescriptor()' function from 'ftp_server_net_util.hpp'.
- //Determines the local IP address by calling 'getHostIPAddress()' function from 'ftp_server_net_util.hpp'.
- //Includes both the IP address and the port number into passive success response according to RFC.
