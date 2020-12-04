@@ -23,7 +23,7 @@
  using namespace std;
 
 
- //Closes the stream socket, represented by 'sockDescriptor'.
+
  void closeSocket(int& sockDescriptor)
  {
  	close(sockDescriptor);
@@ -31,7 +31,6 @@
 
 
 
- //Determines and returns the associated port number from a given socket descriptor.
  int getPortFromSocketDescriptor(const int sockDescriptor)
  {
    struct sockaddr_in sin;
@@ -46,10 +45,6 @@
 
 
 
- //Returns true if there is any data sent by the remote computer on the stream socket represented by 'sockDescriptor'.
- //Waits for the data until 'timeoutSec' + 0.000001x'timeoutUsec' time.
- //If no data has been sent before the time out, sets 'isTimedout' value to 'true'.
- //If any error occurs, sets 'isError' value to 'true'.
  bool isSocketReadyToRead(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool& isTimedout)
  {
   fd_set listenerReadySet;

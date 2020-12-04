@@ -24,7 +24,7 @@
  using namespace std;
 
 int sendFile(char* filename, int& dataSockDescriptor)
-{/*
+{
   int size=0;
   FILE *fp;
 	fp = fopen(filename, FILE_OPEN_MODE);
@@ -44,7 +44,5 @@ int sendFile(char* filename, int& dataSockDescriptor)
 	}
 
   return size;
-  */
-  return 0;
 
 }

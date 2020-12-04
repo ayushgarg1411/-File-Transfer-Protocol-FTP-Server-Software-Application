@@ -20,7 +20,7 @@
 
  int listDirEntries(int dataSockDescriptor)
  {
-   /*
+
    int count = 0;
    char *de = new char[2000];
    DIR *d;
@@ -47,6 +47,4 @@
 		}
 	}
   return count;
-  */
-  return 0;
  }
