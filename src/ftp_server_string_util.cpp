@@ -23,7 +23,7 @@
 
 
 
-  //Replaces all the occurrences of 'find' character in 'str' with 'replace' character.
+
   void replaceAll(char* str, char find, char replace)
   {
     std::string s = str;
@@ -34,7 +34,7 @@
 using namespace std;
 
 
-  //Returns true if 'str' starts with 'prefix'.
+
   bool startsWith(const char* str, const char* prefix)
   {
   	int l = strlen(prefix);
@@ -50,7 +50,6 @@ using namespace std;
   }
 
 
-  //Returns true if 'str' contains 'substr'
   bool contains(const char* str, const char* substr)
   {
   	const char *ptr = strstr(str, substr);
@@ -63,7 +62,6 @@ using namespace std;
 
 
 
-  //Changes all characters of 'str' to upper case.
   void toUpper(char* str)
   {
     int i = 0;
@@ -76,7 +74,7 @@ using namespace std;
     }
   }
 
-  //Changes all characters of 'str' to lower case.
+
   void toLower(char* str)
   {
     int i = 0;
@@ -92,7 +90,6 @@ using namespace std;
 
 
 
-  //Removes all the spaces, if there is any, from the beginning and the ending of 'str'.
   void stripLeadingAndTrailingSpaces(char* str)
   {
     int i,j;
@@ -108,8 +105,6 @@ using namespace std;
 
 
 
-
-  //Removes new line character ('\n'), if there is any, from the end of 'str'.
   void stripNewlineAtEnd(char* str)
   {
     string su = str;

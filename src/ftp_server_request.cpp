@@ -25,7 +25,7 @@
 using namespace std;
 
 void interpreteCommand(char* command, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isUser, bool& isLoggedIn, const char* rootDir)
-{
+{/*
   char *cmd = new char[COMMAND_BUFFER_SIZE];
   char *arg = new char[COMMAND_ARG_MAX_CHARACTER_COUNT];
   char *directory = strdup(rootDir);
@@ -71,10 +71,12 @@ void interpreteCommand(char* command, int& controlSockDescriptor, int& dataListe
   {
     handleCommandUnSupported(controlSockDescriptor);
   }
+  */
 }
 
 void parseCommandLine(char* commandLine, char* command, char* argument)
 {
+  /*
   string str = commandLine;
   string cmd = command;
   string arg = argument;
@@ -83,11 +85,11 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
   arg = str.substr(pos+1);
   strcpy(command, cmd.c_str());
   strcpy(argument, arg.c_str());
-
+*/
 }
 
  void handleCommandUSER(char* username, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isUser)
- {
+ {/*
    if(strcmp(username, DEFAULT_USERNAME) == 0)
   {
     isUser = true;
@@ -98,12 +100,13 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
     sendToRemote(controlSockDescriptor, INVALID_USERNAME_RESPONSE, strlen(INVALID_USERNAME_RESPONSE));
     closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
   }
+  */
  }
 
 
 
  void handleCommandPASS(char* password, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isUser, bool& isLoggedIn)
- {
+ { /*
    if(!isUser)
    {
    	sendToRemote(controlSockDescriptor, INVALID_USERNAME_RESPONSE, strlen(INVALID_USERNAME_RESPONSE));
@@ -118,11 +121,11 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
    {
    	isLoggedIn = true;
    	sendToRemote(controlSockDescriptor, LOGIN_RESPONSE, strlen(LOGIN_RESPONSE));
-   }
- }
+  }*/
+}//----------------double check brackets*******************************
 
  void handleCommandPWD(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
- {
+ {/*
    if(!isLoggedIn)
  	{
  		sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
@@ -135,6 +138,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
     getcwd(dir,COMMAND_BUFFER_SIZE);
  		sendToRemote(controlSockDescriptor, dir, strlen(dir));
  	}
+  */
  }
 
 
@@ -142,6 +146,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 
  void handleCommandCWD(char* directory, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
  {
+   /*
    string s = directory;
    if(!isLoggedIn)
 	{
@@ -158,10 +163,12 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 		chdir(directory);
 		sendToRemote(controlSockDescriptor, CHANGE_DIRECTORY_RESPONSE, strlen(CHANGE_DIRECTORY_RESPONSE));
 	}
+  */
  }
 
  void handleCommandCDUP(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn, const char* rootDir)
  {
+   /*
    if(!isLoggedIn)
 	{
 		sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
@@ -183,22 +190,25 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 			sendToRemote(controlSockDescriptor, CHANGE_TO_PARENT_DIRECTORY_RESPONSE, strlen(CHANGE_TO_PARENT_DIRECTORY_RESPONSE));
 		}
 	}
- }
+  */
+ }//----------------double check brackets*******************************
 
 
  void handleCommandPASV(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
- {
+ {/*
   if(!isLoggedIn)
 	{
 		sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
 		handleNotLoggedIn(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
 	}
 	enteringIntoPassive(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor);
+  */
  }
 
 
  void handleCommandNLST(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
  {
+   /*
   if(!isLoggedIn)
 	{
 		sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
@@ -215,7 +225,8 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
     char* response = new char[FTP_RESPONSE_MAX_LENGTH];
     sprintf(response, NLST_CONNECTION_CLOSE_RESPONSE, count);
     sendToRemote(controlSockDescriptor, response, strlen(response));
-	}
+
+	}*/
  }
 
 
@@ -229,6 +240,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 
  void handleCommandRETR(char* argument, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
  {
+   /*
    if(!isLoggedIn)
 	{
 		sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
@@ -253,7 +265,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 			sendToRemote(controlSockDescriptor, RETR_UNAVAILABLE_ERROR_RESPONSE, strlen(RETR_UNAVAILABLE_ERROR_RESPONSE));
 		}
 	}
-
+*/
  }
 
 
@@ -263,17 +275,19 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 
  void handleCommandQUIT(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor,bool& isClientConnected)
  {
+   /*
    sendToRemote(controlSockDescriptor, QUIT_RESPONSE, strlen(QUIT_RESPONSE));
    closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
+   */
  }
 
  void handleCommandUnSupported(const int controlSockDescriptor)
- {
+ {/*
    sendToRemote(controlSockDescriptor, UNSUPPORTED_COMMAND_RESPONSE, strlen(UNSUPPORTED_COMMAND_RESPONSE));
- }
+ */}
 
  void handleNotLoggedIn(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected)
- {
+ {/*
    sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
    closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
- }
+ */}
