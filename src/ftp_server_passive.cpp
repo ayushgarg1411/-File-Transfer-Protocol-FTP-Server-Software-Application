@@ -26,7 +26,7 @@
 
  void enteringIntoPassive(const int controlSockDescriptor, int& passiveListenerSockDescriptor, int& dataSockDescriptor)
  {
-   /*
+
    bool succeeded = false;
    bool isError = false;
    bool isTimedout = false;
@@ -44,7 +44,7 @@
       closeListenerSocket(passiveListenerSockDescriptor);
     }
 	}
-*/
+
  }
 
 
@@ -52,18 +52,18 @@
 
  void startPassiveListener(int& listenerSockDescriptor, bool& succeded)
  {
-   /*
+
   char* response = new char[FTP_RESPONSE_MAX_LENGTH];
   string s = PASSIVE_DEFAULT_PORT;
   strcpy(response, s.c_str());
 	startListenerSocket(response, listenerSockDescriptor, succeded);
-*/
+
 }
 
 
  void createPassiveSuccessResponse(char* response, const int passiveListenerSockDescriptor)
  {
-   /*
+
   int port;
   char* ip;
 	port = getPortFromSocketDescriptor(passiveListenerSockDescriptor);
@@ -72,5 +72,5 @@
 	ip = getHostIPAddress();
   replaceAll(ip, '.', ',');
   sprintf(response, PASSIVE_SUCCESS_RESPONSE, ip,y, x);
-*/
+
  }

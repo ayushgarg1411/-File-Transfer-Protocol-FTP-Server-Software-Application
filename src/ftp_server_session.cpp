@@ -31,10 +31,13 @@ void startClientFTPSession(int& controlSockDescriptor)
   char *message = new char[FTP_RESPONSE_MAX_LENGTH];
   char *x;
   char *resp = strdup(CONNECTED_RESPONSE);
+  size_t resps = sizeof(char)*strlen(resp);
 
   x = getcwd(rootDir, size_t(rootDir));
-  sendToRemote(controlSockDescriptor, resp, strlen(resp));
-  while(isConnectionReadyToRead(controlSockDescriptor, FTP_CLIENT_SESSION_TIMEOUT_SEC, FTP_CLIENT_SESSION_TIMEOUT_USEC, isError, isTimedOut))
+  sendToRemote(controlSockDescriptor, resp, resps);
+  free(resp);
+  bool y = isConnectionReadyToRead(controlSockDescriptor, FTP_CLIENT_SESSION_TIMEOUT_SEC, FTP_CLIENT_SESSION_TIMEOUT_USEC, isError, isTimedOut);
+  while(y==true && isTimedOut == false && isError==false )
   {
     receiveFromRemote(controlSockDescriptor, message, strlen(message));
     interpreteCommand(message, controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected, isUser, isLoggedIn, x);
