@@ -27,10 +27,7 @@
  void startListenerSocket(char* port, int& listenerSockDescriptor, bool& succeded)
  {
 
- 	size_t hn_length = 256;
- 	char hostname[hn_length];
- 	gethostname(hostname, hn_length);
-
+ 	
  	struct addrinfo hints;
  	memset(&hints, 0, sizeof(struct addrinfo));
  	hints.ai_flags = AI_PASSIVE;
@@ -39,7 +36,7 @@
 
  	struct addrinfo* results;
    	int x;
-   	x = getaddrinfo(hostname, port, &hints, &results);
+   	x = getaddrinfo(NULL, port, &hints, &results);
 
  	if(x != 0)
  	{
@@ -73,7 +70,7 @@
  		cerr<<"Can't open and bind listener socket."<<endl;
  		exit(1);
  	}
- 	const int backLog = 5;
+ 	const int backLog = 10;
  	listen(listenerSockDescriptor, backLog);
  	succeded = true;
 
@@ -82,7 +79,7 @@
 
 
 
- bool isListenerSocketReady(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool& isTimedout)
+ bool isListenerSocketReady(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool&isTimedout)
  {
  	return isSocketReadyToRead(sockDescriptor, timeoutSec, timeoutUSec, isError, isTimedout);
  }
