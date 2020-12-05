@@ -2,9 +2,12 @@
  * @file: ftp_server_connection_listener.cpp
  * @author: Ayush, 656665809, F20N02, CSCI 460, VIU
  * @version: 1.0.0
- * @modified: NOV 06, 2020
+ * @modified: DEC 03, 2020
  *
  */
+
+
+
  #include <iostream>
  #include <iomanip>
  #include <string>
@@ -27,16 +30,17 @@
  void startListenerSocket(char* port, int& listenerSockDescriptor, bool& succeded)
  {
 
- 	
+
  	struct addrinfo hints;
  	memset(&hints, 0, sizeof(struct addrinfo));
  	hints.ai_flags = AI_PASSIVE;
  	hints.ai_family = AF_UNSPEC;
  	hints.ai_socktype = SOCK_STREAM;
+  char *hostname = NULL;
 
  	struct addrinfo* results;
    	int x;
-   	x = getaddrinfo(NULL, port, &hints, &results);
+   	x = getaddrinfo(hostname, port, &hints, &results);
 
  	if(x != 0)
  	{

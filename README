@@ -1,28 +1,59 @@
-# Application Name 
+# Application Name
 
-General descriptions of the application go here.
-
+This project implements FTP Server software application in C++ programming language using Unix Network or Socket programming API.
+FTP is a client-server protocol to transfer files to/from the servers. An FTP client sends FTP request messages to an FTP server.
+FTP server interprets the request message, takes appropriate action, and sends back response message to the client.
+This project runs the following commands associated with ftpserver:
+o USER
+o PASS
+o PWD
+o CWD
+o CDUP
+o PASV
+o NLST
+o RETR
+o QUIT
 
 
 
 ## Technologies
 
-The descriptions of the technologies that are used in this application go here. It includes dependencies or pre-requisites.
 
+This code is fully developed in C++ programming language.
+This program is designed and executed on Linux Debian machines of the VIU labs.
 
 
 
 ## Build, Run, Test, Installation, and Uninstallation
 
-Instructions on how to build, run, test, install, and uninstall the application go here.
+make sure to use the commands below to get the appropriate result:
+ps auwx | pgrep ftpserver
+killall -9 ftpserver
+After the above mentioned commands, you will need to terminals to execute the following project
+as this project is just the server side of the ftpserver. To run the server side, execute the following:
+make clean
+make
+make test
+
 
 
 
 
 ## Usage
 
-Instructions on how to run the application go here.
 
+make sure to use the commands below to get the appropriate result:
+ps auwx | pgrep ftpserver
+killall -9 ftpserver
+After the above mentioned commands, you will need to terminals to execute the following project
+as this project is just the server side of the ftpserver. To run the server side, execute the command given below.
+
+To run the program, there is a makefile that is already designed.
+User simply need to type make to build all the dependencies;
+Then user will type make run that will give executable files to user
+ultimately our user will be having following options to run/check the program:
+
+>test/bin/ftpservertest --log_level=all
 
 
 
@@ -30,9 +61,13 @@ Instructions on how to run the application go here.
 
 List of the contributors goes here.
 
+Instructor Name: Humayun Kabir
+Contributor Name: Ayush Garg
 
 
 
-## License
+Copyright (C) 2020, Ayush Garg
 
-Terms and conditions or the types of licenses granted to use this application go here.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License.

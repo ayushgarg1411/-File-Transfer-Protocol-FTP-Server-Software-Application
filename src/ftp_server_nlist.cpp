@@ -1,8 +1,8 @@
 /**
  * @file: ftp_server_nlist.cpp
- * @author: Name, Student Number, Section, CSCI 460, VIU
+ * @author: Ayush, 656665809, F20N02, CSCI 460, VIU
  * @version: 1.0.0
- * @modified: June 24, 2020
+ * @modified: Dec 04, 2020
  *
  */
  #include <iostream>
@@ -11,9 +11,11 @@
  #include <list>
  #include <cstring>
  #include <cstdlib>
+ #include <fstream>
  #include <sys/types.h>
  #include <unistd.h>
  #include <signal.h>
+ #include <sys/stat.h>
  #include <dirent.h>
  #include "ftp_server_nlist.hpp"
  #include "ftp_server_connection.hpp"
@@ -21,10 +23,8 @@
 
  int listDirEntries(int dataSockDescriptor)
  {
-  // printf("\n\n\n inside st\n\n");
-//
-
-   int count = 0;
+  int count = 0;
+   int size =0;
    char de[2048];
    memset(de, 0, 2048);
    DIR *d;
@@ -48,16 +48,17 @@
 		{
       strcat(de, "F\t");
       strcat(de, dir->d_name);
+      ifstream fsize(dir->d_name, ios::binary);
+      fsize.seekg(0, ios::end);
+      size = fsize.tellg();
+      fsize.close();
       char* x = new char[200];
-      sprintf(x, "%ld", dir->d_ino);
+      sprintf(x, "%d", size);
       strcat(de, "\t\t");
       strcat(de, x);
       strcat(de, "\n");
 		}
 	}
-//  printf("\n\n\n ioutsideide nlst\n\n");
-
-
-  //sendToRemote(dataSockDescriptor, strdup(de), sizeof(char)*strlen(strdup(de)));
+  sendToRemote(dataSockDescriptor, strdup(de), sizeof(char)*strlen(strdup(de)));
   return count;
  }

@@ -1,8 +1,8 @@
 /**
  * @file: ftp_server_passive.cpp
- * @author: Name, Student Number, Section, CSCI 460, VIU
+ * @author: Ayush, 656665809, F20N02, CSCI 460, VIU
  * @version: 1.0.0
- * @modified: June 24, 2020
+ * @modified: Nov 30, 2020
  *
  */
   #include <iostream>
@@ -44,7 +44,7 @@
       closeListenerSocket(passiveListenerSockDescriptor);
     }
 	}
-
+  free(response);
  }
 
 

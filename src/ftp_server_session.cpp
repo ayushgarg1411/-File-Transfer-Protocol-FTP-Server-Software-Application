@@ -1,3 +1,11 @@
+/**
+ * @file: ftp_server_session.cpp
+ * @author: Ayush, 656665809, F20N02, CSCI 460, VIU
+ * @version: 1.0.0
+ * @modified: DEC 04, 2020
+ *
+ */
+
 
 #include <iostream>
 #include <iomanip>
@@ -30,12 +38,8 @@ void startClientFTPSession(int& controlSockDescriptor)
   char rootDir[PATH_MAX];
   char message[FTP_RESPONSE_MAX_LENGTH];
   memset(message,0,sizeof(char)*FTP_RESPONSE_MAX_LENGTH);
-  //char *x;
-  //x = getcwd(rootDir, sizeof(rootDir));
   if(getcwd(rootDir, sizeof(rootDir)) == NULL)
   {
-    //free(x);
-    //printf("\n\n\nsnkfbvf bvlksdnvbsjlbv in\n\n");
     exit(1);
   }
   sendToRemote(controlSockDescriptor, CONNECTED_RESPONSE, strlen(CONNECTED_RESPONSE));
@@ -43,13 +47,9 @@ void startClientFTPSession(int& controlSockDescriptor)
 
   while(y==true)
   {
-    //printf("\n\n\n in while\n\n");
     if(receiveFromRemote(controlSockDescriptor, message, sizeof(char)*FTP_RESPONSE_MAX_LENGTH) > 0)
     {
-      //cout<<"\n\n\ncommand: "<<message<<endl;
-
       interpreteCommand(message, controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected, isUser, isLoggedIn, rootDir);
-      //free(message);
       memset(message,0, FTP_RESPONSE_MAX_LENGTH);
     }
     else
