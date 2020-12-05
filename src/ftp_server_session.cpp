@@ -27,22 +27,37 @@ void startClientFTPSession(int& controlSockDescriptor)
   bool isTimedOut = false;
   int dataSockDescriptor = -1;
   int dataListenerSockDescriptor = -1;
-  char *rootDir = new char[PATH_MAX];
-  char *message = new char[FTP_RESPONSE_MAX_LENGTH];
-  char *x;
-  char *resp = strdup(CONNECTED_RESPONSE);
-  size_t resps = sizeof(char)*strlen(resp);
-
-  x = getcwd(rootDir, size_t(rootDir));
-  sendToRemote(controlSockDescriptor, resp, resps);
-  free(resp);
-  bool y = isConnectionReadyToRead(controlSockDescriptor, FTP_CLIENT_SESSION_TIMEOUT_SEC, FTP_CLIENT_SESSION_TIMEOUT_USEC, isError, isTimedOut);
-  while(y==true && isTimedOut == false && isError==false )
+  char rootDir[PATH_MAX];
+  char message[FTP_RESPONSE_MAX_LENGTH];
+  memset(message,0,sizeof(char)*FTP_RESPONSE_MAX_LENGTH);
+  //char *x;
+  //x = getcwd(rootDir, sizeof(rootDir));
+  if(getcwd(rootDir, sizeof(rootDir)) == NULL)
   {
-    receiveFromRemote(controlSockDescriptor, message, strlen(message));
-    interpreteCommand(message, controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected, isUser, isLoggedIn, x);
+    //free(x);
+    //printf("\n\n\nsnkfbvf bvlksdnvbsjlbv in\n\n");
+    exit(1);
   }
-  closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
+  sendToRemote(controlSockDescriptor, CONNECTED_RESPONSE, strlen(CONNECTED_RESPONSE));
+  bool y = isConnectionReadyToRead(controlSockDescriptor, FTP_CLIENT_SESSION_TIMEOUT_SEC, FTP_CLIENT_SESSION_TIMEOUT_USEC, isError, isTimedOut);
+
+  while(y==true)
+  {
+    //printf("\n\n\n in while\n\n");
+    if(receiveFromRemote(controlSockDescriptor, message, sizeof(char)*FTP_RESPONSE_MAX_LENGTH) > 0)
+    {
+      //cout<<"\n\n\ncommand: "<<message<<endl;
+
+      interpreteCommand(message, controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected, isUser, isLoggedIn, rootDir);
+      //free(message);
+      memset(message,0, FTP_RESPONSE_MAX_LENGTH);
+    }
+    else
+    {
+      closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
+      break;
+    }
+
   if(isTimedOut)
   {
   	sendToRemote(controlSockDescriptor, PASSIVE_ERROR_TIMEOUT_RESPONSE, strlen(PASSIVE_ERROR_TIMEOUT_RESPONSE));
@@ -53,4 +68,5 @@ void startClientFTPSession(int& controlSockDescriptor)
   	sendToRemote(controlSockDescriptor, PASSIVE_ERROR_RESPONSE, strlen(PASSIVE_ERROR_RESPONSE));
     closeAllConnections(controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected);
   }
+}
 }

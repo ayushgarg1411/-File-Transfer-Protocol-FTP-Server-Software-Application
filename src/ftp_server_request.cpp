@@ -26,11 +26,13 @@ using namespace std;
 
 void interpreteCommand(char* command, int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isUser, bool& isLoggedIn, const char* rootDir)
 {
-  char *cmd = new char[COMMAND_BUFFER_SIZE];
-  char *arg = new char[COMMAND_ARG_MAX_CHARACTER_COUNT];
+  char cmd[COMMAND_BUFFER_SIZE];
+  char arg[COMMAND_ARG_MAX_CHARACTER_COUNT];
   char *directory = strdup(rootDir);
+  cout<<"\n\n\ncmd: "<<command<<endl;
   parseCommandLine(command, cmd, arg);
   string str = cmd;
+
   if(str == COMMAND_USER)
   {
     handleCommandUSER(arg, controlSockDescriptor, dataListenerSockDescriptor, dataSockDescriptor, isClientConnected, isUser);
@@ -130,7 +132,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
  	}
  	else
  	{
-    char * dir = new char[COMMAND_BUFFER_SIZE];
+    char dir[COMMAND_BUFFER_SIZE];
     getcwd(dir,COMMAND_BUFFER_SIZE);
  		sendToRemote(controlSockDescriptor, dir, strlen(dir));
  	}
@@ -168,7 +170,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 	}
 	else
 	{
-    char * dir = new char[COMMAND_BUFFER_SIZE];
+    char dir[COMMAND_BUFFER_SIZE];
     getcwd(dir,COMMAND_BUFFER_SIZE);
 		if(dir == rootDir)
 		{
@@ -186,6 +188,8 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 
  void handleCommandPASV(int& controlSockDescriptor, int& dataListenerSockDescriptor, int& dataSockDescriptor, bool& isClientConnected, bool& isLoggedIn)
  {
+   //printf("\n\n\n inside PASV\n\n");
+
   if(!isLoggedIn)
 	{
 		sendToRemote(controlSockDescriptor, NOT_LOGGED_IN_RESPONSE, strlen(NOT_LOGGED_IN_RESPONSE));
@@ -210,9 +214,13 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 	{
     int count;
 		count = listDirEntries(dataSockDescriptor);
-    char* response = new char[FTP_RESPONSE_MAX_LENGTH];
+  //  printf("\n\ncount : %d\n",count);
+    char response[FTP_RESPONSE_MAX_LENGTH];
     sprintf(response, NLST_CONNECTION_CLOSE_RESPONSE, count);
+    //  cout<<response<<endl;
     sendToRemote(controlSockDescriptor, response, strlen(response));
+    //free(response);
+    close(dataSockDescriptor);
 	}
  }
 
@@ -242,7 +250,7 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 		count = sendFile(argument, dataSockDescriptor);
     if(count > 0)
 		{
-			char* response = new char[FTP_RESPONSE_MAX_LENGTH];
+			char response[FTP_RESPONSE_MAX_LENGTH];
       sprintf(response, RETR_CONNECTION_CLOSE_RESPONSE, count);
 			sendToRemote(controlSockDescriptor, response, strlen(response));
 		}
@@ -253,13 +261,6 @@ void parseCommandLine(char* commandLine, char* command, char* argument)
 	}
 
  }
-
-
-
-
-
-
-
 
 
 

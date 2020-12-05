@@ -47,6 +47,7 @@
 
  bool isSocketReadyToRead(const int sockDescriptor, const int timeoutSec, const int timeoutUSec, bool& isError, bool& isTimedout)
  {
+
   fd_set listenerReadySet;
   FD_ZERO(&listenerReadySet);
   FD_SET(sockDescriptor, &listenerReadySet);

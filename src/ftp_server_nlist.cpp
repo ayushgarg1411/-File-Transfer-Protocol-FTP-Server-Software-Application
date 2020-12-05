@@ -16,21 +16,30 @@
  #include <signal.h>
  #include <dirent.h>
  #include "ftp_server_nlist.hpp"
+ #include "ftp_server_connection.hpp"
  using namespace std;
 
  int listDirEntries(int dataSockDescriptor)
  {
+  // printf("\n\n\n inside st\n\n");
+//
 
    int count = 0;
-   char *de = new char[2000];
+   char de[2048];
+   memset(de, 0, 2048);
    DIR *d;
 	struct dirent *dir;
 	d = opendir(DEFAULT_DIRECTORY_PATH);
+  if(d == NULL)
+  {
+    return 0;
+  }
 	while((dir = readdir(d)) != NULL)
 	{
-    count++;
+
 		if(dir->d_type == DT_DIR)
 		{
+      count++;
       strcat(de, "D\t");
       strcat(de, dir->d_name);
       strcat(de, "\n");
@@ -46,5 +55,9 @@
       strcat(de, "\n");
 		}
 	}
+//  printf("\n\n\n ioutsideide nlst\n\n");
+
+
+  //sendToRemote(dataSockDescriptor, strdup(de), sizeof(char)*strlen(strdup(de)));
   return count;
  }

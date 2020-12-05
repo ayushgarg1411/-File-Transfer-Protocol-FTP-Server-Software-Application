@@ -30,7 +30,7 @@ int sendFile(char* filename, int& dataSockDescriptor)
 	fp = fopen(filename, FILE_OPEN_MODE);
 	if(fp)
 	{
-		char* chunk = new char[DATA_SOCKET_SEND_BUFFER_SIZE];
+		char chunk[DATA_SOCKET_SEND_BUFFER_SIZE];
 		while(!feof(fp))
 		{
 			fscanf(fp,"%s", chunk);
